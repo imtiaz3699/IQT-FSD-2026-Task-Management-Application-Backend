@@ -1,17 +1,18 @@
-import express from "express";
-
+import { Router } from "express";
 import {
   getTasks,
+  getTaskById,
   createTask,
   updateTask,
   deleteTask,
 } from "../controllers/task.controller.js";
+import { optionalAuth } from "../middleware/auth.middleware.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get("/", getTasks);
-router.post("/", createTask);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
+router.use(optionalAuth);
+
+router.route("/").get(getTasks).post(createTask);
+router.route("/:id").get(getTaskById).put(updateTask).delete(deleteTask);
 
 export default router;
